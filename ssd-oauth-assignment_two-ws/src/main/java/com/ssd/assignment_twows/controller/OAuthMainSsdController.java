@@ -27,6 +27,7 @@ public class OAuthMainSsdController {
 	@Autowired
 	OAuthDriveSsdService oAuthDriveSsdService;
 
+	//Redirect to the home page
 	@GetMapping("/")
 	public String showOAuthHomePage() throws Exception {
 		if (oAuthAuthorizationSsdService.isOAuthUserAuthenticated()) {
@@ -48,12 +49,14 @@ public class OAuthMainSsdController {
 		return "home.html";
 	}
 
+	//google drive sign in
 	@GetMapping("/googlesignin")
 	public void doOAuthGoogleSignIn(HttpServletResponse response) throws Exception {
 		loggerSsd.debug("SSO Called...");
 		response.sendRedirect(oAuthAuthorizationSsdService.authenticateOAuthUserViaGoogle());
 	}
 
+	//Gooogle account redirect
 	@GetMapping("/oauth/callback")
 	public String saveOAuthAuthorizationCode(HttpServletRequest request) throws Exception {
 		loggerSsd.debug("SSO Callback invoked...");
@@ -67,6 +70,7 @@ public class OAuthMainSsdController {
 		return "redirect:/login";
 	}
 
+	//logout from the system
 	@GetMapping("/logout")
 	public String logoutOAuth(HttpServletRequest request) throws Exception {
 		loggerSsd.debug("Logout invoked...");
@@ -74,6 +78,7 @@ public class OAuthMainSsdController {
 		return "redirect:/login";
 	}
 
+	//Upload a file to the google drive
 	@PostMapping("/upload")
 	public String uploadOAuthFile(HttpServletRequest request, @ModelAttribute OAuthUploadFileSsd uploadedFile) throws Exception {
 		MultipartFile multipartFile = uploadedFile.getMultipartFile();

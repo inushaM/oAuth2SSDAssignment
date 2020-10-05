@@ -37,6 +37,7 @@ public class OAuthDriveSsdServiceImpl implements OAuthDriveSsdService {
 				.setApplicationName(OAuthApplicationSsdConstant.APPLICATION_OAUTH_NAME).build();
 	}
 
+	//file upload to the drive
 	@Override
 	public void uploadFile(MultipartFile multipartFile) throws Exception {
 		logger.debug("Inside Upload Service...");
@@ -48,6 +49,7 @@ public class OAuthDriveSsdServiceImpl implements OAuthDriveSsdService {
 		java.io.File transferedFile = new java.io.File(path, fileName);
 		multipartFile.transferTo(transferedFile);
 
+		//set the file name
 		File fileMetadata = new File();
 		fileMetadata.setName(fileName);
 		

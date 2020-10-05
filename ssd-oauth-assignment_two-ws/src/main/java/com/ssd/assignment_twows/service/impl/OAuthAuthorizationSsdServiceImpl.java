@@ -31,6 +31,7 @@ public class OAuthAuthorizationSsdServiceImpl implements OAuthAuthorizationSsdSe
 	@Autowired
 	private OAuthApplicationSsdConfig config;
 
+	//initiate the drive
 	@PostConstruct
 	public void init() throws Exception {
 		InputStreamReader reader = new InputStreamReader(config.getDriveOAuthSecretKeys().getInputStream());
@@ -41,6 +42,7 @@ public class OAuthAuthorizationSsdServiceImpl implements OAuthAuthorizationSsdSe
 				OAuthApplicationSsdConstant.SCOPES).setDataStoreFactory(dataStoreFactory).build();
 	}
 
+	//Authentication validation
 	@Override
 	public boolean isOAuthUserAuthenticated() throws Exception {
 		Credential credential = getOAuthCredentials();
@@ -52,11 +54,13 @@ public class OAuthAuthorizationSsdServiceImpl implements OAuthAuthorizationSsdSe
 		return false;
 	}
 
+	//get the authentication credentials
 	@Override
 	public Credential getOAuthCredentials() throws IOException {
 		return flow.loadCredential(OAuthApplicationSsdConstant.USER_OAUTH_IDENTIFIER_KEY);
 	}
 
+	//Authentication via google
 	@Override
 	public String authenticateOAuthUserViaGoogle() throws Exception {
 		GoogleAuthorizationCodeRequestUrl url = flow.newAuthorizationUrl();
@@ -65,12 +69,14 @@ public class OAuthAuthorizationSsdServiceImpl implements OAuthAuthorizationSsdSe
 		return redirectOAuthUrl;
 	}
 
+	//Exchange the token
 	@Override
 	public void exchangeOAuthCodeForTokens(String code) throws Exception {
 		GoogleTokenResponse googleTokenResponse = flow.newTokenRequest(code).setRedirectUri(config.getCALLBACK_URI_OAUTH()).execute();
 		flow.createAndStoreCredential(googleTokenResponse, OAuthApplicationSsdConstant.USER_OAUTH_IDENTIFIER_KEY);
 	}
 
+	//session remove
 	@Override
 	public void removeOAuthUserSession(HttpServletRequest request) throws Exception {
 		dataStoreFactory.getDataStore(config.getCredentialsOAuthFolder().getFilename()).clear();

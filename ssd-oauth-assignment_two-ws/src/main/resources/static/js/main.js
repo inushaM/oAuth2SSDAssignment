@@ -1,5 +1,6 @@
 var selectedOAuthFileCount, totalOAuthUploadedValue, fileOAuthCount, filesOAuthUploaded;
 
+//file upload complete message and progress bar
 function onUploadOAuthComplete(e) {
 	totalOAuthUploadedValue += document.getElementById('files').files[filesOAuthUploaded].size;
 	filesOAuthUploaded++;
@@ -12,7 +13,7 @@ function onUploadOAuthComplete(e) {
 		swal("Success!", "Finished uploading file(s)", "success");
 	}
 }
-
+//file selection
 function onOAuthFileSelection(e) {
 	files = e.target.files; // FileList object
 	var output = [];
@@ -28,7 +29,7 @@ function onOAuthFileSelection(e) {
 	document.getElementById('selectedFiles').innerHTML = output.join('');
 
 }
-
+//file upload progress bar
 function onUploadOAuthProgress(e) {
 	if (e.lengthComputable) {
 		var percentComplete = parseInt((e.loaded + totalOAuthUploadedValue) * 100 / selectedOAuthFileCount);
@@ -43,7 +44,7 @@ function onUploadOAuthProgress(e) {
 function onUploadOAuthFailed(e) {
 	swal("Error!", "Error uploading file(s)", "danger");
 }
-
+//file upload and call to the upload controller via POST method
 function uploadOAuthNext() {
 	var xhrequest = new XMLHttpRequest();
 	var formDate = new FormData();
@@ -55,7 +56,7 @@ function uploadOAuthNext() {
 	xhrequest.open("POST", "/upload");
 	xhrequest.send(formDate);
 }
-
+//start file upload
 function startOAuthUpload() {
 	if (document.getElementById('files').files.length <= 0) {
 		swal("Cannot Upload!", "Please select file (s) to upload", "warning");
@@ -64,7 +65,7 @@ function startOAuthUpload() {
 		uploadOAuthNext();
 	}
 }
-
+//reset the screen
 function resetOAuthScreen() {
 	document.getElementById('bar').style.width = '0%';
 	document.getElementById('bar').innerText = '';
